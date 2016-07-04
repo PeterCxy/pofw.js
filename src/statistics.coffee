@@ -4,17 +4,27 @@ fs = require "fs"
 log = require "winston"
 {argv} = require "./pofw"
 {generateTable} = require "./shared/stats"
+{cleanupJob} = require "./cleanup"
 
 statistics = {}
 saved = false
 
-save = ->
+save = (sync = false) ->
   if not saved
-    fs.writeFile argv.statistics, JSON.stringify(statistics), (err) ->
-      throw err if err?
-      saved = true
+    if not sync
+      fs.writeFile argv.statistics, JSON.stringify(statistics), (err) ->
+        throw err if err?
+        saved = true
+    else
+      log.info "Writing statistics in synchronous mode"
+      fs.writeFileSync argv.statistics, JSON.stringify(statistics)
 
 setInterval save, 1 * 60 * 1000 # Save every minute
+
+# Save before exiting
+cleanupJob ->
+  log.info "Saving statistics before exiting"
+  save true # Cannot do async jobs when exiting
 
 exports.RX = RX = "rx"
 exports.TX = TX = "tx"
