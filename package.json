@@ -1,0 +1,28 @@
+{
+  "name": "pofw.js",
+  "version": "1.0.0",
+  "description": "A port forwarding program implemented in Node.JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "coffee -o lib -c src",
+    "prepublish": "coffee -o lib -c src",
+    "start": "coffee -o lib -c src && node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PeterCxy/pofw.js.git"
+  },
+  "author": "PeterCxy",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/PeterCxy/pofw.js/issues"
+  },
+  "homepage": "https://github.com/PeterCxy/pofw.js#readme",
+  "devDependencies": {
+    "coffee-script": "^1.10.0"
+  },
+  "dependencies": {
+    "winston": "^2.2.0"
+  }
+}
