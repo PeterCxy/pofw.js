@@ -23,5 +23,9 @@ exports.startForwardingUDP = startForwardingUDP = (from_proto, from_ip, from_por
           log.error e
         finally
           log.info "[#{from_proto} <-> #{to_proto}] #{address}:#{port} <---> #{serverAddr.address}:#{serverAddr.port} ====> #{serverAddr.address}:#{serverAddr.port} <---> #{rinfo.address}:#{rinfo.port}"
+
+    socket.on "error", (err) =>
+      log.error err
+
   server.on "error", (err) =>
-    log.info err
+    log.error err
