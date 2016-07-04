@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "coffee -o lib -c src",
     "prepublish": "coffee -o lib -c src",
-    "start": "coffee -o lib -c src && node index.js"
+    "start": "coffee -o lib -c src && node --max-old-space-size=64 --expose-gc index.js"
   },
   "repository": {
     "type": "git",

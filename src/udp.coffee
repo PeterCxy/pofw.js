@@ -14,7 +14,10 @@ exports.startForwardingUDP = startForwardingUDP = (from_proto, from_ip, from_por
     {address, port} = rinfo
     socket = dgram.createSocket to_proto
     socket.send msg, 0, msg.length, to_port, to_ip, (err) ->
-      log.error err if err? and err != 0
+      if err? and err != 0
+        log.error err
+        socket = msg = rinfo = null
+        global.gc() if global.gc?
 
     # Allow one packet to come back for each outgoing packet
     socket.on "message", (msg, rinfo) ->
@@ -27,6 +30,8 @@ exports.startForwardingUDP = startForwardingUDP = (from_proto, from_ip, from_por
           log.error e
         finally
           log.info "[#{from_proto} <-> #{to_proto}] #{address}:#{port} <---> #{serverAddr.address}:#{serverAddr.port} ====> #{serverAddr.address}:#{serverAddr.port} <---> #{rinfo.address}:#{rinfo.port}"
+        socket = msg = rinfo = null
+        global.gc() if global.gc?
 
     socket.on "error", (err) ->
       log.error err

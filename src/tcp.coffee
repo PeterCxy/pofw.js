@@ -4,7 +4,7 @@ net = require "net"
 
 exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to_port) ->
   local = "#{from_ip}:#{from_port}"
-  server = net.createServer (c) =>
+  server = net.createServer (c) ->
 
     #log.info "new connection from [tcp] #{c.address().address}:#{c.address().port}"
     s = net.createConnection to_port, to_ip
@@ -17,6 +17,13 @@ exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to
             ended = true
             s.end()
             c.end()
+            s.destroy()
+            c.destroy()
+            s = c = endAll = null
+
+            global.gc() if global.gc?
+
+            return
 
       # Tunnel data between our client and the remote server
       c.on "data", (data) ->
@@ -30,11 +37,9 @@ exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to
       c.on "error", (err) ->
         log.error err
         endAll()
-        c.destroy()
       s.on "error", (err) ->
         log.error err
         endAll()
-        s.destroy()
       c.on "end", ->
         endAll()
       s.on "end", ->
