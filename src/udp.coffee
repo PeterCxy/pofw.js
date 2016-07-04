@@ -1,13 +1,16 @@
 log = require "winston"
 dgram = require "dgram"
+{RX, TX, increase} = require "./statistics"
 
 exports.startForwardingUDP = startForwardingUDP = (from_proto, from_ip, from_port, to_proto, to_ip, to_port) ->
+  local = "#{from_ip}:#{from_port}"
   serverAddr = {}
   server = dgram.createSocket from_proto
   server.bind from_port, from_ip, =>
     log.info "listening on [#{from_proto}] #{from_ip}:#{from_port}"
     serverAddr = server.address()
   server.on "message", (msg, rinfo) =>
+    increase local, TX, msg.length
     {address, port} = rinfo
     socket = dgram.createSocket to_proto
     socket.send msg, 0, msg.length, to_port, to_ip, (err) =>
@@ -15,6 +18,7 @@ exports.startForwardingUDP = startForwardingUDP = (from_proto, from_ip, from_por
 
     # Allow one packet to come back for each outgoing packet
     socket.on "message", (msg, rinfo) =>
+      increase local, RX, msg.length
       server.send msg, 0, msg.length, port, address, (err) =>
         log.error err if err? and err != 0
         try

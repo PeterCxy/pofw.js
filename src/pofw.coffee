@@ -1,16 +1,22 @@
 SUPPORTED_PROTOCOLS = ["tcp", "tcp4", "tcp6", "udp", "udp4", "udp6"]
 
 {argv} = require("yargs")
-  .usage("Usage: $0 -c [config]")
+  .usage("Usage: $0 -c [config] -s [statistics]")
   .demand("c")
-  .default({"c": "config.json"})
+  .default("c", "config.json")
   .alias("c", "config")
   .describe("c", "Path to the configuration file in JSON format")
+  .demand("s")
+  .default("s", "statistics.json")
+  .alias("s", "statistics")
+  .describe("s", "Path to the statistics file where the program will write usage statistics into")
   .help("h")
   .alias("h", "help")
+exports.argv = argv
 fs = require "fs"
 {startForwardingTCP} = require "./tcp"
 {startForwardingUDP} = require "./udp"
+{setStatistics} = require "./statistics"
 
 # Load the configuration file
 s = fs.createReadStream(argv.config)
@@ -43,3 +49,14 @@ s.on "end", ->
       startForwardingTCP c.from_ip, c.from_port, c.to_ip, c.to_port
     else if c.from_protocol.startsWith "udp"
       startForwardingUDP c.from_protocol, c.from_ip, c.from_port, c.to_protocol, c.to_ip, c.to_port
+
+# Initialize the statistics
+fs.exists argv.statistics, (exists) ->
+  if exists
+    r = fs.createReadStream(argv.statistics)
+    statistics = ""
+    r.on "data", (data) ->
+      statistics += data
+    r.on "end", ->
+      statistics = JSON.parse statistics
+      setStatistics statistics
