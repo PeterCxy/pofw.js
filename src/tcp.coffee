@@ -9,7 +9,7 @@ exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to
     #log.info "new connection from [tcp] #{c.address().address}:#{c.address().port}"
     s = net.createConnection to_port, to_ip
 
-    s.on "connect", =>
+    s.on "connect", ->
       log.info "[tcp] #{c.remoteAddress}:#{c.remotePort} <---> #{c.localAddress}:#{c.localPort} ====> #{s.localAddress}:#{s.localPort} <---> #{s.remoteAddress}:#{s.remotePort}"
       ended = false
       endAll = ->
@@ -19,28 +19,28 @@ exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to
             c.end()
 
       # Tunnel data between our client and the remote server
-      c.on "data", (data) =>
+      c.on "data", (data) ->
         increase "tcp", local, TX, data.length
         s.write data if not ended
-      s.on "data", (data) =>
+      s.on "data", (data) ->
         increase "tcp", local, RX, data.length
         c.write data if not ended
 
       # Handle end and error events
-      c.on "error", (err) =>
+      c.on "error", (err) ->
         log.error err
         endAll()
         c.destroy()
-      s.on "error", (err) =>
+      s.on "error", (err) ->
         log.error err
         endAll()
         s.destroy()
-      c.on "end", =>
+      c.on "end", ->
         endAll()
-      s.on "end", =>
+      s.on "end", ->
         endAll()
 
-  server.on "error", (err) =>
+  server.on "error", (err) ->
     log.error err
-  server.listen from_port, from_ip, 511, =>
+  server.listen from_port, from_ip, 511, ->
     log.info "listening on [tcp] #{from_ip}:#{from_port}"
