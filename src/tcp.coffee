@@ -5,8 +5,6 @@ net = require "net"
 exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to_port) ->
   local = "#{from_ip}:#{from_port}"
   server = net.createServer (c) ->
-
-    #log.info "new connection from [tcp] #{c.address().address}:#{c.address().port}"
     s = net.createConnection to_port, to_ip
 
     s.on "connect", ->
