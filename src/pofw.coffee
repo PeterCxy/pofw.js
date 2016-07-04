@@ -1,7 +1,7 @@
 SUPPORTED_PROTOCOLS = ["tcp", "tcp4", "tcp6", "udp", "udp4", "udp6"]
 
 {argv} = require("yargs")
-  .usage("Usage: $0 -c [config] -s [statistics]")
+  .usage("Usage: $0 -c [config] -s [statistics] -w [port]")
   .demand("c")
   .default("c", "config.json")
   .alias("c", "config")
@@ -10,6 +10,11 @@ SUPPORTED_PROTOCOLS = ["tcp", "tcp4", "tcp6", "udp", "udp4", "udp6"]
   .default("s", "statistics.json")
   .alias("s", "statistics")
   .describe("s", "Path to the statistics file where the program will write usage statistics into")
+  .demand("w")
+  .number("w")
+  .default("w", "8080")
+  .alias("w", "web")
+  .describe("w", "Web server port for showing statistics page (0 = disable)")
   .help("h")
   .alias("h", "help")
 exports.argv = argv

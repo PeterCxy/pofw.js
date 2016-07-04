@@ -20,10 +20,10 @@ exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to
 
       # Tunnel data between our client and the remote server
       c.on "data", (data) =>
-        increase local, TX, data.length
+        increase "tcp", local, TX, data.length
         s.write data if not ended
       s.on "data", (data) =>
-        increase local, RX, data.length
+        increase "tcp", local, RX, data.length
         c.write data if not ended
 
       # Handle end and error events
