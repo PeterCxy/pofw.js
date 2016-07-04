@@ -18,7 +18,7 @@ exports.startForwardingUDP = startForwardingUDP = (from_proto, from_ip, from_por
 
     # Allow one packet to come back for each outgoing packet
     socket.on "message", (msg, rinfo) =>
-      increase to_proto, local, RX, msg.length
+      increase from_proto, local, RX, msg.length
       server.send msg, 0, msg.length, port, address, (err) =>
         log.error err if err? and err != 0
         try
