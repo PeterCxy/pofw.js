@@ -34,7 +34,7 @@ formatNumber = (num) ->
   else if num >= 1024
     "#{(num / 1024).toFixed 3} KiB"
   else
-    "#{num.toFxied 3} B"
+    "#{num.toFixed 3} B"
 
 if module?
   # Add to module.exports if running in Node.JS
