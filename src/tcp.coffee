@@ -5,7 +5,9 @@ net = require "net"
 exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to_port) ->
   local = "#{from_ip}:#{from_port}"
   server = net.createServer (c) ->
+    c = c.setNoDelay true
     s = net.createConnection to_port, to_ip
+        .setNoDelay true
 
     s.on "connect", ->
       log.info "[tcp] #{c.remoteAddress}:#{c.remotePort} <---> #{c.localAddress}:#{c.localPort} ====> #{s.localAddress}:#{s.localPort} <---> #{s.remoteAddress}:#{s.remotePort}"
@@ -26,10 +28,16 @@ exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to
       # Tunnel data between our client and the remote server
       c.on "data", (data) ->
         increase "tcp", local, TX, data.length
-        s.write data if not ended
+        if not ended
+          c.pause()
+          s.write data, ->
+            c.resume() if not ended
       s.on "data", (data) ->
         increase "tcp", local, RX, data.length
-        c.write data if not ended
+        if not ended
+          s.pause()
+          c.write data, ->
+            s.resume() if not ended
 
       # Handle end and error events
       c.on "error", (err) ->
