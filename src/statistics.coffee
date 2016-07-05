@@ -59,5 +59,9 @@ if argv.web > 0
       res.send index
   app.get "/backend/stats", (req, res) ->
     res.send JSON.stringify statistics
+  app.get "/backend/reset", (req, res) ->
+    statistics = {}
+    saved = false
+    res.send JSON.stringify ok: true
   app.listen argv.web, ->
     log.info "listening on [http] 127.0.0.1:#{argv.web}"
