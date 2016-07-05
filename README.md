@@ -13,13 +13,13 @@ Installation
 To install globally
 
 ```bash
-npm install -g pofwjs
+npm install -g pofw.js
 ```
 
 To install locally
 
 ```bash
-npm install pofwjs
+npm install pofw.js
 ```
 
 Or you may repackage this module and install it using the package manager of your system.
