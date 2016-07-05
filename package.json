@@ -18,6 +18,9 @@
     "url": "https://github.com/PeterCxy/pofw.js/issues"
   },
   "homepage": "https://github.com/PeterCxy/pofw.js#readme",
+  "bin": {
+    "pofwjs": "./bin/pofwjs"
+  },
   "devDependencies": {
     "coffee-script": "^1.10.0"
   },

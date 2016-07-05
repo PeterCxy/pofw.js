@@ -1,7 +1,7 @@
 SUPPORTED_PROTOCOLS = ["tcp", "tcp4", "tcp6", "udp", "udp4", "udp6"]
 
 {argv} = require("yargs")
-  .usage("Usage: $0 -c [config] -s [statistics] -w [port]")
+  .usage("Usage: pofwjs -c [config] -s [statistics] -w [port]")
   .demand("c")
   .default("c", "config.json")
   .alias("c", "config")
