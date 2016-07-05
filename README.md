@@ -41,7 +41,7 @@ Options:
   -h, --help        Show help                               [boolean]
 ```
 
-See the `examples` directory for details on the configuration file.
+See the `example` directory for details on the configuration file.
 
 Supported protocols
 
