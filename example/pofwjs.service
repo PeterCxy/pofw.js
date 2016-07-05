@@ -7,7 +7,8 @@ User=nobody
 Type=simple
 WorkingDirectory=/etc/pofwjs
 ExecStart=/usr/bin/pofwjs -c /etc/pofwjs/config.json
-ExecStop=/usr/bin/kill -2 $MAINPID
+KillSignal=SIGINT
+SuccessExitStatus=2
 
 [Install]
 WantedBy=multi-user.target
