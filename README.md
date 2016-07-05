@@ -57,6 +57,8 @@ Statistics
 
 `pofwjs` will record the usage statistics in the file which is assigned by the `-s` or `--statistics` argument (by default it will be `statistics.json` in the current directory). And if the port is set to an non-zero number, say, `8080`, then a web frontend will be present at `127.0.0.1:8080`. Visit that address in your browser and a table with the usage statistics will be shown. The program also exposes an API `/backend/reset` which can reset all the statistics to 0 on receiving a `GET` request.
 
+The web interface listens only on the loopback address `127.0.0.1`. If you want to access it over Internet, use Nginx as a reverse proxy. Remember to set up an authentication method like HTTP basic auth at least on the `/backend/` subdirectory.
+
 The program stores the statistics in-memory and writes them into disk every minute or when killed with the signal `SIGINT`.
 
 To get monthly usage statistics, you can combine the `/backend/reset` API with `curl` or similar tools and a `timer` utility like `systemd-timer`
