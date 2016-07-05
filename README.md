@@ -65,6 +65,15 @@ License
 ---
 
 ```
+Copyright © 2016 Peter Cai <peter at typeblog dot net>
+This program is free software. It comes without any warranty, to the
+extent permitted by applicable law. You can redistribute it and/or
+modify it under the terms of the Do What The Fuck You Want To Public
+License, Version 2, as published by Sam Hocevar. See the license below
+for more details.
+```
+
+```
 DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
             Version 2, December 2004
 
