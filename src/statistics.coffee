@@ -10,6 +10,7 @@ statistics = {}
 saved = false
 
 save = (sync = false) ->
+  return if !argv.statistics?
   if not saved
     if not sync
       fs.writeFile argv.statistics, JSON.stringify(statistics), (err) ->
