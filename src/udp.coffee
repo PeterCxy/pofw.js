@@ -38,6 +38,16 @@ exports.startForwardingUDP = startForwardingUDP = (from_proto, from_ip, from_por
     socket.on "error", (err) ->
       log.error err
 
+    # Close the socket if no packet came back within 30 seconds
+    setTimeout ->
+      if socket isnt null
+        try
+          socket.close()
+        catch e
+          log.error e
+        socket = msg = rinfo = null
+    , 30 * 1000
+
   server.on "error", (err) ->
     log.error err
 
