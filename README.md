@@ -61,7 +61,7 @@ The web interface listens only on the loopback address `127.0.0.1`. If you want 
 
 The program stores the statistics in-memory and writes them into disk every minute or when killed with the signal `SIGINT`.
 
-To get monthly usage statistics, you can combine the `/backend/reset` API with `curl` or similar tools and a `timer` utility like `systemd-timer`
+To get monthly usage statistics, you can combine the `/backend/reset` API with `curl` or similar tools and a `timer` utility like `systemd-timer` (`IFTTT` is a good idea too)
 
 License
 ---
