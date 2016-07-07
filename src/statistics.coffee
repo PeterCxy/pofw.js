@@ -64,5 +64,8 @@ if argv.web > 0
     statistics = {}
     saved = false
     res.send JSON.stringify ok: true
+  app.get "/backend/reload", (req, res) ->
+    process.emit 'SIGHUP'
+    res.send JSON.stringify ok: true
   app.listen argv.web, ->
     log.info "listening on [http] 127.0.0.1:#{argv.web}"
