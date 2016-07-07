@@ -1,10 +1,12 @@
 log = require "winston"
 net = require "net"
+main = require "./pofw"
 {RX, TX, increase} = require "./statistics"
 
 exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to_port) ->
   local = "#{from_ip}:#{from_port}"
   server = net.createServer (c) ->
+    main.onServerUp()
     c = c.setNoDelay true
     s = net.createConnection to_port, to_ip
         .setNoDelay true
@@ -56,3 +58,6 @@ exports.startForwardingTCP = startForwardingTCP = (from_ip, from_port, to_ip, to
 
   server.listen from_port, from_ip, 511, ->
     log.info "listening on [tcp] #{from_ip}:#{from_port}"
+
+  process.once 'SIGHUP', ->
+    server.close main.onServerClose

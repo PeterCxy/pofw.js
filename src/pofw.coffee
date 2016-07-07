@@ -18,6 +18,7 @@ SUPPORTED_PROTOCOLS = ["tcp", "tcp4", "tcp6", "udp", "udp4", "udp6"]
   .help("h")
   .alias("h", "help")
 exports.argv = argv
+serverCount = 0
 fs = require "fs"
 log = require "winston"
 {startForwardingTCP} = require "./tcp"
@@ -25,7 +26,7 @@ log = require "winston"
 {setStatistics} = require "./statistics"
 
 # Load the configuration file
-exports.reload = reload = (configFile) ->
+exports.reload = reload = (configFile = argv.config) ->
   fs.exists configFile, (exists) ->
     if !exists
       log.error "#{argv.config} not found"
@@ -63,7 +64,7 @@ exports.reload = reload = (configFile) ->
         else if c.from_protocol.startsWith "udp"
           startForwardingUDP c.from_protocol, c.from_ip, c.from_port, c.to_protocol, c.to_ip, c.to_port
 
-reload(argv.config)
+reload()
 
 # Initialize the statistics
 fs.exists argv.statistics, (exists) ->
@@ -75,3 +76,10 @@ fs.exists argv.statistics, (exists) ->
     r.on "end", ->
       statistics = JSON.parse statistics
       setStatistics statistics
+
+exports.onServerUp = -> serverCount++
+exports.onServerClose = ->
+  serverCount--
+  if serverCount is 0
+    log.info "Reloading..."
+    reload()

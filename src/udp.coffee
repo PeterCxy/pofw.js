@@ -1,5 +1,6 @@
 log = require "winston"
 dgram = require "dgram"
+main = require "./pofw"
 {RX, TX, increase} = require "./statistics"
 
 exports.startForwardingUDP = startForwardingUDP = (from_proto, from_ip, from_port, to_proto, to_ip, to_port) ->
@@ -7,6 +8,7 @@ exports.startForwardingUDP = startForwardingUDP = (from_proto, from_ip, from_por
   serverAddr = {}
   server = dgram.createSocket from_proto
   server.bind from_port, from_ip, ->
+    main.onServerUp()
     log.info "listening on [#{from_proto}] #{from_ip}:#{from_port}"
     serverAddr = server.address()
   server.on "message", (msg, rinfo) ->
@@ -38,3 +40,6 @@ exports.startForwardingUDP = startForwardingUDP = (from_proto, from_ip, from_por
 
   server.on "error", (err) ->
     log.error err
+
+  process.once 'SIGHUP', ->
+    server.close main.onServerClose
