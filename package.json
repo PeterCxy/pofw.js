@@ -1,6 +1,6 @@
 {
   "name": "pofw.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A port forwarding program implemented in Node.JS",
   "main": "index.js",
   "scripts": {
